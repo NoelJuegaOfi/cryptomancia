@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Cryptomancia</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Courier New', monospace;
+    background-color: #000;
+    color: #00ffcc;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  h1 {
+    text-shadow: 0 0 10px #00ffcc;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+  }
+
+  input, button {
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  input {
+    width: 300px;
+  }
+
+  button {
+    background-color: #00ffcc;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  #output {
+    margin-top: 20px;
+    font-size: 24px;
+    white-space: pre-wrap;
+    text-align: center;
+    max-width: 80%;
+  }
+
+  #qr {
+    margin-top: 20px;
+  }
+
+  canvas.matrix {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+</style>
+</head>
+<body>
+  <h1 id="titulo">Cryptomancia 🔮</h1>
+  <input type="text" id="inputText" placeholder="Escribe tu mensaje...">
+  <input type="text" id="clave" placeholder="Clave secreta (opcional)">
+  <button onclick="traducir()">Traducir</button>
+  <button onclick="toggleModo()">Cambiar Modo</button>
+  <div id="output"></div>
+  <div id="qr"></div>
+
+  <audio id="sonido" src="https://www.soundjay.com/button/sounds/button-3.mp3" preload="auto"></audio>
+  <canvas class="matrix"></canvas>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <script>
+    // Matrix Rain
+    const canvas = document.querySelector('.matrix');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const cols = Math.floor(canvas.width / 20);
+    const yPos = Array(cols).fill(0);
+
+    function matrixRain() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#00ffcc';
+      ctx.font = '20px monospace';
+      yPos.forEach((y, i) => {
+        const text = String.fromCharCode(124 + Math.random() * 30);
+        const x = i * 20;
+        ctx.fillText(text, x, y);
+        yPos[i] = y > canvas.height + Math.random() * 100 ? 0 : y + 20;
+      });
+    }
+    setInterval(matrixRain, 50);
+
+    // Cifrado base
+    const mapaBase = {
+      'a': '∆', 'b': 'ß', 'c': '¢', 'd': '∂', 'e': '∑',
+      'f': 'ƒ', 'g': '¶', 'h': '#', 'i': '¡', 'j': '¿',
+      'k': '⌘', 'l': '¬', 'm': 'µ', 'n': 'ñ', 'o': 'ø',
+      'p': 'π', 'q': 'Ω', 'r': '®', 's': '$', 't': '†',
+      'u': '∪', 'v': '√', 'w': 'ω', 'x': '×', 'y': '¥', 'z': 'ζ'
+    };
+
+    function traducir() {
+      const input = document.getElementById('inputText').value.toLowerCase();
+      const clave = document.getElementById('clave').value.toLowerCase();
+      const sonido = document.getElementById('sonido');
+      let mapa = { ...mapaBase };
+
+      // Alterar el mapa con la clave
+      if (clave) {
+        for (let i = 0; i < clave.length; i++) {
+          const letra = clave[i];
+          if (mapa[letra]) {
+            mapa[letra] = mapa[letra] + i;
+          }
+        }
+        document.getElementById('titulo').innerText = `Cryptomancia: Sigil de "${clave}" 🔮`;
+      } else {
+        document.getElementById('titulo').innerText = `Cryptomancia 🔮`;
+      }
+
+      let traducido = '';
+      for (let i = input.length - 1; i >= 0; i--) {
+        const letra = input[i];
+        traducido += mapa[letra] || letra;
+      }
+
+      document.getElementById('output').innerText = '';
+      sonido.play();
+
+      let i = 0;
+      const intervalo = setInterval(() => {
+        document.getElementById('output').innerText += traducido[i];
+        i++;
+        if (i >= traducido.length) clearInterval(intervalo);
+      }, 100);
+
+      // Generar QR
+      const qr = new QRious({
+        element: document.createElement('canvas'),
+        value: traducido,
+        size: 200
+      });
+      const qrDiv = document.getElementById('qr');
+      qrDiv.innerHTML = '';
+      qrDiv.appendChild(qr.element);
+    }
+
+    function toggleModo() {
+      const hora = new Date().getHours();
+      if (hora >= 6 && hora < 18) {
+        document.body.style.backgroundColor = '#f0f0f0';
+        document.body.style.color = '#333';
+      } else {
+        document.body.style.backgroundColor = '#000';
+        document.body.style.color = '#00ffcc';
+      }
+    }
+  </script>
+</body>
+</html>
