@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Cryptomancia: El Grimorio Digital</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: radial-gradient(circle, #0a0a0a, #000);
+    color: #00ffcc;
+    font-family: 'Cinzel', serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 15px #00ffcc;
+  }
+
+  p {
+    max-width: 600px;
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    text-shadow: 0 0 5px #00ffcc;
+  }
+
+  button {
+    padding: 15px 30px;
+    font-size: 18px;
+    background-color: #00ffcc;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 0 10px #00ffcc;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px #00ffcc;
+  }
+
+  .symbol {
+    position: absolute;
+    font-size: 24px;
+    opacity: 0.2;
+    animation: float 10s infinite linear;
+    color: #00ffcc;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(-100vh) rotate(360deg); }
+  }
+</style>
+</head>
+<body>
+  <h1>Cryptomancia 🔮</h1>
+  <p>
+    En los rincones ocultos del código, existe un idioma que solo los iniciados pueden descifrar.  
+    <strong>Cryptomancia</strong> es el arte de transformar palabras en símbolos,  
+    de invocar mensajes que solo los ojos entrenados pueden leer.  
+    Este grimorio digital te abre la puerta a una dimensión secreta.  
+    ¿Estás listo para cruzarla?
+  </p>
+  <button onclick="invocar()">Invocar Cryptomancia</button>
+
+  <!-- Símbolos flotantes -->
+  <div class="symbol" style="top:80%; left:10%;">∆</div>
+  <div class="symbol" style="top:90%; left:30%;">π</div>
+  <div class="symbol" style="top:85%; left:50%;">Ω</div>
+  <div class="symbol" style="top:95%; left:70%;">ζ</div>
+  <div class="symbol" style="top:88%; left:90%;">†</div>
+
+  <script>
+    function invocar() {
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
